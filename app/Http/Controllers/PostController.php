@@ -12,7 +12,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts=Post::orderBy('created_at', 'desc')->get();
+        $user=auth()->user();
+        return view('post.index', compact('posts','user'));
     }
 
     /**
@@ -38,7 +40,8 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->body = $request->body;
         if ($request->hasFile('image')) {
-            $name = $request->file('image')->getClientOriginalName();
+            $original = $request->file('image')->getClientOriginalName();
+            $name=date('Ymd_His').'_'.$original;
             $request->file('image')->move('storage/images', $name);
             $post->image = $name;
         }
