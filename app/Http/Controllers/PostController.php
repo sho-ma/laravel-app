@@ -20,7 +20,7 @@ class PostController extends Controller
      */
     public function create()
     {
-      return view('post.create');
+        return view('post.create');
     }
 
     /**
@@ -28,25 +28,23 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $inputs= $request->validate([
-            'title'=>'required|max:255',
-            'body'=>'required|max:1000'
+        $inputs = $request->validate([
+            'title' => 'required|max:255',
+            'body' => 'required|max:1000',
+            'image' => 'image|max:1024'
         ]);
 
-        $post=new Post();
-        $post->title=$request->title;
-        $post->body=$request->body;
-        // エラーなる
+        $post = new Post();
+        $post->title = $request->title;
+        $post->body = $request->body;
         if ($request->hasFile('image')) {
             $name = $request->file('image')->getClientOriginalName();
             $request->file('image')->move('storage/images', $name);
             $post->image = $name;
-        }else{
-            return view('post.create');
         }
-        $post->user_id=auth()->user()->id;
+        $post->user_id = auth()->user()->id;
         $post->save();
-        return redirect()->route('post.create')->with('message','投稿を作成しました。');
+        return redirect()->route('post.create')->with('message', '投稿を作成しました。');
     }
 
     /**
