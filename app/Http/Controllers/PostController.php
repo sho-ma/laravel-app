@@ -30,12 +30,20 @@ class PostController extends Controller
     {
         $inputs= $request->validate([
             'title'=>'required|max:255',
-            'body'=>'required|max:1000',
+            'body'=>'required|max:1000'
         ]);
 
         $post=new Post();
         $post->title=$request->title;
         $post->body=$request->body;
+        // エラーなる
+        if ($request->hasFile('image')) {
+            $name = $request->file('image')->getClientOriginalName();
+            $request->file('image')->move('storage/images', $name);
+            $post->image = $name;
+        }else{
+            return view('post.create');
+        }
         $post->user_id=auth()->user()->id;
         $post->save();
         return redirect()->route('post.create')->with('message','投稿を作成しました。');
