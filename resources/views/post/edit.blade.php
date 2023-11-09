@@ -34,7 +34,7 @@
                     <input type="file" name='image' id="image">
                 </div>
                 <x-primary-button class="mt-4">
-                    {{ __('編集') }}
+                    編集
                 </x-primary-button>
 
             </form>
